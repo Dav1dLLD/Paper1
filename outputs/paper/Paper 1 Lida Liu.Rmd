@@ -1,0 +1,112 @@
+---
+title: "Student’s immunization coverage was a problem"
+date: "2/6/2022"
+author: "Lida Liu"
+abstract: "This report uses the data from the website Open Data Toronto to analyze the immunization coverage for teenagers in school in Toronto. The data reveals that the immunization coverage of students was not as high enough as the ideal situation, and parents should still let their children receive these vaccinations in order to prevent them from having severe diseases."
+bibliography: ref_list.bib
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(opendatatoronto)
+library(dplyr)
+library(kableExtra)
+
+# get package
+package <- show_package("99ff3657-b2e7-4005-a6fd-c36838ccc96d")
+package
+ 
+# get all resources for this package
+resources <- list_package_resources("99ff3657-b2e7-4005-a6fd-c36838ccc96d")
+ 
+# identify datastore resources; by default, Toronto Open Data sets datastore resource format to CSV for non-geospatial and GeoJSON for geospatial resources
+datastore_resources <- filter(resources, tolower(format) %in% c('csv', 'geojson'))
+ 
+# load the first datastore resource as a sample
+data <- filter(datastore_resources, row_number()==1) %>% get_resource()
+data
+
+```
+
+# 1  Introduction
+Nowadays the covid-19 pandemic has become a globally healthy issue, and the vaccination of covid-19 are promoting all over the world to reduce the spread of the pandemic. The occurrence of this pandemic highly illustrates the importance of the vaccinations of disease. The Canadian government website shows that the situation is evolving daily[@ABCDEFGH].According to the continuous variation of covid-19 virus, it is hard to predict the end of this global pandemic, and the consequences of healthy issues are truly severe. However, with the injection of vaccination of DTP and MMR, the daily diseases could be easily prevented. 
+
+In Ontario, the ISPA requires students who are in elementary and secondary schools to receive vaccinations of diphtheria, tetanus, measles, mumps, rubella, and polio antigens [@ABCDEFGHI].These diseases are common in life and the injection of vaccinations seems to be necessary. However, some of the parents are prohibiting their children from receiving these vaccinations of daily diseases, due to philosophical and religious issues. In this report, I’ll use statistical methods to show the overall immunization coverage of young students in Toronto, in order to show that the student’s immunization coverage was a problem in Toronto.
+
+# 2  Data
+In this report, the R statistical language program is used for the platform of the analysis [@ABCDEFG], the package opendatatoronto is used for the acess to the dataset[@ABCD], the package ggplot2 is used for the graphs I'll draw to enhance my analysis [@ABCDEF], the package kableExtra is used for the table I'll make as well [@ABCDE], and the package tidyverse will be used throughout the coding for convenience[@ABC].
+
+The dataset I’m using for this report includes the immunization coverage for both DTP and MMR vaccinations of young students from 7to 17 years old who are receiving education in Toronto in a single year (Open Data Toronto 2022). To be more specific, the source of the dataset is from the Panorama, the provincial information system used to track immunization, and the range of the dataset is from year 2017 to 2018 (Open Data Toronto 2022). Ethically, the dataset includes the rate of students who were not receiving the vaccinations, due to religious or philosophical issues, which is a record of students’ and their families’ privacy. However, due to the fact that this dataset is recorded for young students’ healthy problems, the reason to record the data is acceptable. Statistically, since this vaccination activity is mandatory, and the Panorama information system is an official system to track immunization, the selection bias and non response bias may not happen. Consequently, the information bias may not occur in this dataset.
+
+However, there would be some problems based on the characteristics of the dataset. First of all, the dataset is collected from 2017 to 2018, and now it is 2022, so that the dataset’s effectiveness is questionable. Secondly, the dataset only includes the immunization coverage situation in Toronto, so it is hard to tell that the dataset is representative for the entire Canada or not. Moreover, the overall situation is changing rapidly, due to the fact that this dataset is collected before the occurrence of covid-19, and now this dataset in 2021 may change, because people would notice the importance of prevention of diseases.
+
+Overall, the population of the dataset are all the elementary and secondary schools in Toronto except some extreme cases like school whose enrolled students are less than or equal to 10. The sample of the dataset is the immunization coverage of vaccinations from each school, and the frame of the dataset is the collection from Panorama.
+
+The dataset contains 808 observations, with 9 variables, and the important variables are listed below
+1.Enrolled population, which is the number of students in each school.
+2.DTP coverage rate, which is the rate of students who received DTP vaccinations in their own school.
+3.DTP Religious exemption rate, which is the rate of students who reject to receive DTP vaccinations in their own school, due to religious or philosophical issues.
+4.MMR coverage rate, which is the rate of students who received MMR vaccinations in their own school.
+5.MMR Religious exemption rate, which is the rate of students who reject to receive MMR vaccinations in their own school, due to religious or philosophical issues.
+
+
+```{r, include=FALSE}
+glimpse(data)
+```
+
+```{r 1, fig.cap ="Histogram of DPT coverage rate",fig.width=3, fig.height=2,echo=FALSE}
+data %>% ggplot(aes(x = `DTP coverage rate (%)`)) + geom_histogram(fill = "blue", color = "black", bins = 100) + theme_classic()+
+  labs(x = "DTP coverage rate", y = "number of schools", title = "Histogram:DTP coverage rate")
+```
+
+```{r 2, fig.cap ="Histogram of MMR coverage rate",fig.width=3, fig.height=2,echo=FALSE}
+data %>% ggplot(aes(x = `MMR coverage rate (%)`)) + geom_histogram(fill = "blue", color = "black", bins = 100) + theme_classic()+
+  labs(x = "DTP coverage rate", y = "number of schools", title = "Histogram:MMR Coverage rate")
+```
+
+
+By directly looking at the distribution of data in figure 1 and figure 2, it is obvious that the majority of the students in elementary and secondary schools in Toronto received both the DTP and MMR vaccinations, because data in both histograms are right-skewed. These two histograms illustrate that both the coverage rate are about 90% to 97%. However, it is also apparent that students in only a few schools are 100% vaccinated with two types of vaccinations in 2017 to 2018, and these two daily vaccinations are important for young children daily health.
+
+```{r, echo=FALSE}
+summary_table <- data %>% filter(!is.na(`DTP coverage rate (%)`)) %>% summarise(
+                                  min = min(`DTP coverage rate (%)`),
+                                  Q1 = quantile(`DTP coverage rate (%)`,0.25),
+                                  median = median(`DTP coverage rate (%)`),
+                                  Q3 = quantile(`DTP coverage rate (%)`,0.75),
+                                  max = max(`DTP coverage rate (%)`),
+                                  IQR = Q3 - Q1,
+                                  mean = mean(`DTP coverage rate (%)`), 
+                                  sd = sd(`DTP coverage rate (%)`), 
+                                  Small_Outliers = sum(`DTP coverage rate (%)` < Q1 - 1.5*IQR),
+                                  Large_Outliers = sum(`DTP coverage rate (%)` > Q3 + 1.5*IQR)) 
+# change their orders, add or remove some of them
+knitr::kable(summary_table, caption = "Table of DTP coverage rate")
+```
+
+
+```{r,echo=FALSE}
+summary_table2 <- data %>% filter(!is.na(`MMR coverage rate (%)`)) %>% summarise(
+                                  min = min(`MMR coverage rate (%)`),
+                                  Q1 = quantile(`MMR coverage rate (%)`,0.25),
+                                  median = median(`MMR coverage rate (%)`),
+                                  Q3 = quantile(`MMR coverage rate (%)`,0.75),
+                                  max = max(`MMR coverage rate (%)`),
+                                  IQR = Q3 - Q1,
+                                  mean = mean(`MMR coverage rate (%)`), 
+                                  sd = sd(`MMR coverage rate (%)`), 
+                                  Small_Outliers = sum(`MMR coverage rate (%)` < Q1 - 1.5*IQR),
+                                  Large_Outliers = sum(`MMR coverage rate (%)` > Q3 + 1.5*IQR)) 
+# change their orders, add or remove some of them
+knitr::kable(summary_table, caption = "Table of MMR coverage rate")
+```
+
+According to the Table 1 and Table 2, it can be revealed that there are still approximately 35 outliers for each types of vaccination, which means that there are still 35 schools that didn't have enough students vaccinated with two types of vaccination. For DTP vaccination, there is a school that had only 26.7% vaccination coverage rate , and for MMR vaccination, there is a school that had 51.7% vaccination coverage rate. It is horrible to see these data, and the schools of outliers should be investigated in order to find the reason of the low vaccination coverage.
+
+In a nut shell, it is quite astonishing to see that there are still schools with low vaccination coverage. Health is always an important thing to have, especially for young students. Thus, after people going through the covid-19 pandemic, the daily vaccination for basic health should be promoted even further, in order to reduce the impact of getting these disease in daily life, because the healthy issue could be negatively impactful to both public and individuals.
+
+\newpage
+
+
+# Reference
