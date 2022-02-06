@@ -6,7 +6,7 @@ abstract: "This report uses the data from the website Open Data Toronto to analy
 bibliography: ref_list.bib
 output: pdf_document
 ---
-here is my link to GitHub^[https://github.com/Dav1dLLD/Paper1.git]
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
@@ -33,7 +33,7 @@ data
 # 1  Introduction
 Nowadays the covid-19 pandemic has become a globally healthy issue, and the vaccination of covid-19 are promoting all over the world to reduce the spread of the pandemic. The occurrence of this pandemic highly illustrates the importance of the vaccinations of disease. The Canadian government website shows that the situation is evolving daily[@ABCDEFGH].According to the continuous variation of covid-19 virus, it is hard to predict the end of this global pandemic, and the consequences of healthy issues are truly severe. However, with the injection of vaccination of DTP and MMR, the daily diseases could be easily prevented. 
 
-In Ontario, the ISPA requires students who are in elementary and secondary schools to receive vaccinations of diphtheria, tetanus, measles, mumps, rubella, and polio antigens [@ABCDEFGHI].These diseases are common in life and the injection of vaccinations seems to be necessary. However, some of the parents are prohibiting their children from receiving these vaccinations of daily diseases, due to philosophical and religious issues. In this report, I’ll use statistical methods to show the overall immunization coverage of young students in Toronto, in order to show that the student’s immunization coverage was a problem in Toronto.
+In Ontario, the ISPA requires students who are in elementary and secondary schools to receive vaccinations of diphtheria, tetanus, measles, mumps, rubella, and polio antigens [@ABCDEFGHI].These diseases are common in life and the injection of vaccinations seems to be necessary. However, some of the parents are prohibiting their children from receiving these vaccinations of daily diseases, due to philosophical and religious issues. In this report, I’ll use statistical methods to show the overall immunization coverage of young students in Toronto, in order to show that the student’s immunization coverage was a problem in Toronto.^[https://github.com/Dav1dLLD/Paper1.git]
 
 # 2  Data
 In this report, the R statistical language program is used for the platform of the analysis [@ABCDEFG], the package opendatatoronto is used for the acess to the dataset[@ABCD], the package ggplot2 is used for the graphs I'll draw to enhance my analysis [@ABCDEF], the package kableExtra is used for the table I'll make as well [@ABCDE], and the package tidyverse will be used throughout the coding for convenience[@ABC].
@@ -105,6 +105,7 @@ knitr::kable(summary_table, caption = "Table of MMR coverage rate")
 According to the Table 1 and Table 2, it can be revealed that there are still approximately 35 outliers for each types of vaccination, which means that there are still 35 schools that didn't have enough students vaccinated with two types of vaccination. For DTP vaccination, there is a school that had only 26.7% vaccination coverage rate , and for MMR vaccination, there is a school that had 51.7% vaccination coverage rate. It is horrible to see these data, and the schools of outliers should be investigated in order to find the reason of the low vaccination coverage.
 
 In a nut shell, it is quite astonishing to see that there are still schools with low vaccination coverage. Health is always an important thing to have, especially for young students. Thus, after people going through the covid-19 pandemic, the daily vaccination for basic health should be promoted even further, in order to reduce the impact of getting these disease in daily life, because the healthy issue could be negatively impactful to both public and individuals.
+
 
 \newpage
 
